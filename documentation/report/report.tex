@@ -1,0 +1,238 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Journal Article
+% LaTeX Template
+% Version 1.4 (15/5/16)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com) with extensive modifications by
+% Vel (vel@LaTeXTemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[twoside,twocolumn]{article}
+
+\usepackage{blindtext} % Package to generate dummy text throughout this template 
+
+\usepackage[sc]{mathpazo} % Use the Palatino font
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\linespread{1.05} % Line spacing - Palatino needs more space between lines
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+
+\usepackage{graphicx}
+\graphicspath{ {./asset/} }
+
+\usepackage[english]{babel} % Language hyphenation and typographical rules
+
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{booktabs} % Horizontal rules in tables
+
+\usepackage{lettrine} % The lettrine is the first enlarged letter at the beginning of the text
+
+\usepackage{enumitem} % Customized lists
+\setlist[itemize]{noitemsep} % Make itemize lists more compact
+
+\usepackage{abstract} % Allows abstract customization
+\renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic text
+
+\usepackage{titlesec} % Allows customization of titles
+\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
+\renewcommand\thesubsection{\roman{subsection}} % roman numerals for subsections
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
+
+\usepackage{fancyhdr} % Headers and footers
+\pagestyle{fancy} % All pages have headers and footers
+\fancyhead{} % Blank out the default header
+\fancyfoot{} % Blank out the default footer
+\fancyhead[C]{ECE 464 Final $\bullet$ March 2022} % Custom header text
+\fancyfoot[RO,LE]{\thepage} % Custom footer text
+
+\usepackage{titling} % Customizing the title section
+
+\usepackage{hyperref} % For hyperlinks in the PDF
+
+\newcommand{\newp}{\newline\indent}
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\setlength{\droptitle}{-4\baselineskip} % Move the title up
+
+\pretitle{\begin{center}\Huge\bfseries} % Article title formatting
+\posttitle{\end{center}} % Article title closing formatting
+\title{Task Offloading to the Cloud for Embedded Devices} % Article title
+\author{%
+\textsc{Joseph Rubin} \\[1ex] % Your name
+\normalsize Princeton University \\ % Your institution
+\normalsize \href{mailto:jmrubin@princeton.edu}{jmrubin@princeton.edu} % Your email address
+%\and % Uncomment if 2 authors are required, duplicate these 4 lines if more
+%\textsc{Jane Smith}\thanks{Corresponding author} \\[1ex] % Second author's name
+%\normalsize University of Utah \\ % Second author's institution
+%\normalsize \href{mailto:jane@smith.com}{jane@smith.com} % Second author's email address
+}
+\date{\today} % Leave empty to omit a date
+\renewcommand{\maketitlehookd}{%
+\begin{abstract}
+\noindent The number of real time embedded systems has increased following the IoT boom.
+Real time embedded systems need to complete tasks before their deadlines expire, even with limited resources.
+While offloading to higher-end machines in the local network is possible, it's often easier to set up a service running on the cloud to perform some of the work.
+Deciding exactly which tasks to offload and when to do it is of principal importance, since cloud overhead (in terms of running time and the power consumption required to make network requests) must be considered.
+In this paper, we use a challenged-based model for tasks based on Proof of Work to run experiments on novel algorithms to determine what methods perform well to determine how to offload tasks.
+To do so, we create a simple simulation environment to help us collect data.
+\end{abstract}
+}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+% Print the title
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\section{Introduction}
+
+\lettrine[nindent=0em,lines=3]{C}{areful} design of an embedded system takes care to reduce power consumption and cost of materials.
+Systems with real time constraints, however, must complete tasks fast enough to meet their deadlines, even while using limited resources.
+With today's availability of advanced cloud infrastructure an embedded device that is connected to the internet can offload data to be processed on a server and even retrieve the results.
+The accelerating growth of IoT (Internet of Things)~\cite{7750968} means that many devices are indeed online and thus might benefit from off-device task assistance.
+\newp This isn't a free lunch, though.
+Using a network stack (such as WiFi) consumes power~\cite{7545919}, and running data through a network (especially when the device needs a response before it can continue) may be slow.
+Thus the system will only benefit from offloading tasks that are sufficiently time or energy consuming to be worth the overhead of the network request.
+Furthermore, the system may decide algorithmically how to batch tasks together before sending them to the cloud to minimize the overhead.
+\newp In this report, I have created a simple real time operating system to simulate an embedded device with many deadline-bound periodic tasks running simultaneously.
+I've produced a method of creating fake tasks with variable processing time requirements (based on proof of work) and modeled the power and time consumption of using the network stack to send the tasks to a cloud service.
+I've furthermore created a cloud service to handle these tasks and created algorithms for the embedded system to decide how to batch and delegate tasks.
+Lastly, I've presented my findings as a result of running dozens of simulations with my proposed system and algorithms.
+\newp In section II I will provide explanations for concepts used throughout the report, in section III I will describe the motivation behind our methodology, and in section IV I will provide the technical details of our methodology.
+
+%------------------------------------------------
+
+\section{Background}
+
+\subsection{RTOS}
+
+Real time systems collect information about the physical world from sensors and use that data to take action or report on their surroundings.
+A Real-Time Operating System (RTOS) executes tasks on a system where data processing has strict time constraints (deadlines).
+\newp In this report, we consider a fictional RTOS with strict deadlines.
+
+\subsection{The Cloud}
+
+Cloud providers such as AWS (used in this report) provide Infrastructure as a Service (IaaS) to their clients, allowing users to rent compute and storage media hosted in data centers across the world.
+Choosing the closest data center will have large impact on our data collection because network propogation delay can be on the order of milliseconds or even seconds.
+\newp Atop IaaS is Function as a service (FaaS); these offerings allow users to write a cloud service without choosing the physical characteristics of the hardware that it will be running on.
+In this report, we use AWS Lambda (a FaaS) to create a low-latency endpoint for our embedded system to interact with.
+
+\subsection{PoW}
+
+Proof of Work is a system for verifying that computational expendiatures have been made by some party.
+For this report, we use it as a simple way to model tasks with predictable runtimes.
+\newp See section IV for more information about our use of PoW in this report.
+
+%------------------------------------------------
+
+\section{Motivation}
+
+There are many types of embedded devices and they are used for a wide variety of purposes.
+Thus instead of trying to model a particular device, we attempt to simulate the core similarities between all of the systems.
+Namely
+\begin{itemize}
+  \item an RTOS with the ability to run multiple threads of execution in parallel.
+  \item threads capable of offloading tasks to the cloud.
+  \item tasks represented as a PoW challenges.
+  \item a cloud service that can complete tasks and return their results.
+\end{itemize}
+
+Simulation is a valuable technique for gathering metrics on complex systems.
+For example, to understand how congestion will affect a netowork, it is common to simulate network topologies using software such as \texttt{Mininet}.
+We can create a virtual setup of routers and switches and run simulated packets through the system.
+In this way, many simulations can be run at once or in quick succession.
+\newp This report follows a similar approach.
+Rather than program a microcontroller and build a network-connected device, we can program a computer to behave like one.
+
+%------------------------------------------------
+
+\section{Methodology}
+
+\subsection{Proposed Approach}
+To that end, we programmed a basic real time OS in C++ (in order to use its low-level facilities to create threads, them being most similar to what would be available on an embedded system) and a cloud service using AWS Lambda.
+Our OS makes it easy to run periodic tasks in parallel and tracks when deadlines are not met.
+
+Each task is a PoW challenge $C_{n,p}$ with a solution set $S_{n,p}$ where
+\[
+  S_{n,p} = \{ k \in \mathbb{N} : \textnormal{SHA-256}(p || k)[0:n] = 0^n \}
+\]
+
+In other words, an $n$,$p$-challenge solution is a natural number whose SHA-256 output when appended to the challenge text $p$ starts with $n$ zero bits.
+A solution is difficult to compute (and modulating $n$ will determine exactly how difficult) but easy to verify.
+\newp The probability of finding a correct solution is $2^{-n}$, thus on average it will take $2^n$ guesses.
+In order to make the time it takes to complete a task more predictable, we may decide to forgo a challenge of size $n$ and instead use $2^{n-(n/q)}$ challenges of size $n/q$ which will also take an expected $2^{n-(n/q)} \cdot 2^{n/q} = 2^n$ guesses.
+\newp The device has the capability to solve these challenges itself, but it may also choose to send tasks in batches to the cloud service in JSON format:
+
+\begin{verbatim}
+{
+  "tasks": [
+    {"n": 10, "p": "sahfowebfsadfjwq"},
+    {"n": 14, "p": "qerhbvcohaerjhfd"},
+    {"n": 4,  "p": "pnosnvahiouhffwe"},
+  ]
+}
+\end{verbatim}
+
+The operating system will fork a new thread to complete each task and collect metrics about CPU usage and task completion.
+\newp The cloud service is programmed in TypeScript on AWS lambda and will have access to increased resources.
+It will solve all challenges sent in a single invocation and return the results over the network.
+    
+\subsection{Flowchart}
+
+\begin{center}
+  \includegraphics[scale=0.45]{flowchart.png}
+\end{center}
+
+The embedded device communicates directly with the lambda service.
+Because there is overhead to every network request, tasks will be sent in batches.
+
+\subsection{Algorithms}
+
+The algorithms will be explained in more detail in the final report.
+Consider an algorithm that does not batch tasks but instead offloads one task at a time to the cloud service.
+For an $n$,$p$-challenge, there is some threshold $n>t$ where the overhead of sending the task to the network will be outweighed by the time savings.
+Finding this $t$ will be a matter of experimentation, and our results will be presented in the final report.
+\newp There is also a power draw associated with the network request.
+We'll take the aproach that the power consumption is always worth if whenever the task would otherwise fail to complete on time.
+If, however, there are multiple ways to complete all of our tasks on time, the strategy that minimizes the total power draw will be considered best.
+Note that power draw is associated with each individual network request as well as challenge-solving on the device (but not challenge-solving on the cloud).
+Thus we will explore the relative affects of the two types of power usage.
+
+\subsection{Data Collection}
+
+We'll collect data by running many simulations (possibly at the same time on Princeton research clusters).
+We'll make graphs to visualize our results.
+
+%----------------------------------------------------------------------------------------
+%	REFERENCE LIST
+%----------------------------------------------------------------------------------------
+
+\nocite{*}
+\bibliographystyle{IEEEtranS}
+\bibliography{references}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
