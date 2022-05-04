@@ -47,10 +47,19 @@ void run_periods(int thread_id, int period_ms, int period_count, int period_inde
     }
 
     // Do the task.
-    int i = 0;
-    std::string nonce = random_string(8);
-    while (!validate_challenge(4, nonce + std::to_string(i))) {
-        i++;
+    if (period_ms == 1000) {
+        int i = 0;
+        std::string nonce = random_string(8);
+        while (!validate_challenge(2, nonce + std::to_string(i))) {
+            i++;
+        }
+    }
+    else {
+        int i = 0;
+        std::string nonce = random_string(8);
+        while (!validate_challenge(5, nonce + std::to_string(i))) {
+            i++;
+        }
     }
 
     // Check how long it took to do the task.
