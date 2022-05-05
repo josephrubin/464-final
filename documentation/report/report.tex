@@ -119,9 +119,25 @@ Furthermore, the system may decide algorithmically how to batch tasks together b
 \newp In this report, I have created a simple real time operating system to simulate an embedded device with many deadline-bound periodic tasks running simultaneously.
 I've produced a method of creating fake tasks with variable processing time requirements (based on proof of work) and modeled the power and time consumption of using the network stack to send the tasks to a cloud service.
 Lastly, I've presented my findings as a result of running dozens of simulations with my proposed system and algorithms.
-\newp In Section II I will discuss the papers in the field, in Section III I will provide explanations for concepts used throughout the report, in Section IV I will describe the motivation behind our methodology, and in Section V I will provide the technical details of our methodology.
+\newp In Section II I will discuss the papers in the field, in Section III I will provide explanations for concepts used throughout the report, in Section IV I will describe the motivation behind our methodology, in Section V I will provide the technical details of our methodology, in section V I will discuss my results and in section VII I will give my conclusions.
 
 \section{Related Work}
+
+Mora et al.~\cite{mora} make a computational model to come up with best way to schedule tasks between the device and the cloud.
+
+Jassas et al.~\cite{7946662} gather results of different offloading strategies using realistic programs like bubble sort, but we will use PoW to obtain a mathematical model of task difficulty.
+
+Nikolov et al.~\cite{8825621} show the low-level details of connected an embedded system to the cloud.
+
+Joe Bungo~\cite{5681660} proposes cloud tools as a method of teaching embedded systems.
+
+Dobrin~\cite{7790777} et al. and Hallmans et al.~\cite{7281777} review cloud computing tools in the context of embedded systems.
+
+Qian~\cite{abcd} et al. consider the problem of streaming time-series data from devices to the cloud for processing.
+
+Pötsch et al.~\cite{7969658} discuss power analysis of wireless embedded systems, a study that is useful to determining the importance of the data presented in this paper, and Pedram~\cite{qqqq} discusses techniques for efficient power usage in embedded devices.
+
+We won't consider parallel embedded systems int his report, but Sha~\cite{1544328} discusses the pros and cons of that architecture.
 
 %------------------------------------------------
 
@@ -138,13 +154,12 @@ A Real-Time Operating System (RTOS) executes tasks on a system where data proces
 Cloud providers such as AWS (used in this report) provide Infrastructure as a Service (IaaS) to their clients, allowing users to rent compute and storage media hosted in data centers across the world.
 Choosing the closest data center will have large impact on our data collection because network propogation delay can be on the order of milliseconds or even seconds.
 \newp Atop IaaS is Function as a service (FaaS); these offerings allow users to write a cloud service without choosing the physical characteristics of the hardware that it will be running on.
-In this report, we use AWS Lambda (a FaaS) to create a low-latency endpoint for our embedded system to interact with.
 
 \subsection{PoW}
 
 Proof of Work is a system for verifying that computational expendiatures have been made by some party.
 For this report, we use it as a simple way to model tasks with predictable runtimes.
-\newp See section IV for more information about our use of PoW in this report.
+\newp See section V for more information about our use of PoW in this report.
 
 %------------------------------------------------
 
@@ -157,11 +172,10 @@ Namely
   \item an RTOS with the ability to run multiple threads of execution in parallel.
   \item threads capable of offloading tasks to the cloud.
   \item tasks represented as PoW challenges.
-  \item a cloud service that can complete tasks and return their results.
 \end{itemize}
 
 Simulation is a valuable technique for gathering metrics on complex systems.
-For example, to understand how congestion will affect a network, it is common to simulate network topologies using software such as \texttt{Mininet}.
+For example, to understand how congestion will affect a network, it is common to simulate network topologies using software such as \texttt{Mininet}\footnote{http://mininet.org/api/annotated.html}.
 We can create a virtual setup of routers and switches and run simulated packets through the system.
 In this way, many simulations can be run at once or in quick succession.
 \newp This report follows a similar approach.
@@ -184,7 +198,7 @@ Each task is a PoW challenge $C_{n,p}$ with a solution set $S_{n,p}$ where
 In other words, an $n$,$p$-challenge solution is a natural number whose SHA-256 output when appended to the challenge text $p$ starts with $n$ zero bits.
 A solution is difficult to compute (and modulating $n$ will determine exactly how difficult) but easy to verify.
 \newp The probability of finding a correct solution is $2^{-n}$, thus on average it will take $2^n$ guesses.
-In order to make the time it takes to complete a task more predictable, we may decide to forgo a challenge of size $n$ and instead use $2^{n-(n/q)}$ challenges of size $n/q$ which will also take an expected $2^{n-(n/q)} \cdot 2^{n/q} = 2^n$ guesses.
+In order to make the time it takes to complete a task more predictable, it is possible to forgo a challenge of size $n$ and instead use $2^{n-(n/q)}$ challenges of size $n/q$ which will also take an expected $2^{n-(n/q)} \cdot 2^{n/q} = 2^n$ guesses.
 \newp The device has the capability to solve these challenges itself, but it may also choose to send tasks in batches to the cloud service in JSON format:
 
 \begin{verbatim}
@@ -197,10 +211,11 @@ In order to make the time it takes to complete a task more predictable, we may d
 }
 \end{verbatim}
 
-The operating system will fork a new thread to complete each task and collect metrics about CPU usage and task completion.
-\newp The cloud service is programmed in TypeScript on AWS lambda and will have access to increased resources.
-It will solve all challenges sent in a single invocation and return the results over the network.
-    
+However, insteading of programming an actual cloud service, we focussed our code-writing on the real time OS, and used a simple model to simluate a cloud service.
+Namely, when the device chooses to use the cloud service, it incurs a small time overhead but gets to skip its challenge.
+
+The operating system forks a new thread to complete each task and collect metrics about task completion.
+   
 \subsection{Flowchart}
 
 \begin{center}
@@ -221,13 +236,12 @@ The \texttt{task manager} waits until each of its child threads finish in turn, 
 
 Consider an algorithm that does not batch tasks but instead offloads one task at a time to the cloud service.
 For an $n$,$p$-challenge, there is some threshold $n>t$ where the overhead of sending the task to the network will be outweighed by the time savings.
+But time is not the only resource at play.
 
-But there is also a power draw associated with the network request.
+There is also a power draw associated with the network request.
 If there are multiple ways to offload tasks that meet our timing constraints, we should choose the strategy that minimizes the total number of tasks offloaded.
 
-\subsection{Experimental Results}
-
-Of primary interest is discovering the best tasks to offload to the cloud in order to minimize -
+\section{Experimental Results}
 
 Data\footnotemark was collected in four simulations.
 For each, we control the tasks to be run in periods of $500$, $1000$, and $3000$.
@@ -276,7 +290,7 @@ We must be cautious to read too much into this experiment, though.
 We only tested one configuration of task periods and challenge sizes.
 Also, we didn't apply any strategies that would start tasks early if a previous task completed on time.
 
-\subsection{Conclusions}
+\section{Conclusions}
 
 We learn from our experiment that offloading the shortest period tasks minimizes total lateness (because the most tasks are offloaded), but we can achieve the most efficient results (in terms of number of tasks offloaded) by offloading the tasks with the longest period.
 
@@ -288,7 +302,6 @@ The code for this report is located at https://github.com/josephrubin/464-final
 %	REFERENCE LIST
 %----------------------------------------------------------------------------------------
 
-\nocite{*}
 \bibliographystyle{IEEEtranS}
 \bibliography{references}
 

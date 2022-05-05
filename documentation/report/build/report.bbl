@@ -25,90 +25,69 @@
 J.~Bungo, ``Embedded systems programming in the cloud: A novel approach for
   academia,'' \emph{IEEE Potentials}, vol.~30, no.~1, pp. 17--23, 2011.
 
-\bibitem{4563875}
-W.~J. Dally, J.~Balfour, D.~Black-Shaffer, J.~Chen, R.~C. Harting, V.~Parikh,
-  J.~Park, and D.~Sheffield, ``Efficient embedded computing,'' \emph{Computer},
-  vol.~41, no.~7, pp. 27--32, 2008.
-
 \bibitem{7790777}
 A.~Dobrin, G.~Stamatescu, C.~Dragana, and V.~Sgarciu, ``Cloud challenges for
-  networked embedded systems: A review,'' in \emph{2016 20th International
-  Conference on System Theory, Control and Computing (ICSTCC)}, 2016, pp.
-  866--871.
+  networked embedded systems: A review,'' in \emph{Proc. 2016 20th
+  International Conference on System Theory, Control and Computing (ICSTCC)},
+  2016, pp. 866--871.
 
 \bibitem{7545919}
 K.~Gai, M.~Qiu, H.~Zhao, and M.~Liu, ``Energy-aware optimal task assignment for
-  mobile heterogeneous embedded systems in cloud computing,'' in \emph{2016
-  IEEE 3rd International Conference on Cyber Security and Cloud Computing
+  mobile heterogeneous embedded systems in cloud computing,'' in \emph{Proc.
+  2016 IEEE 3rd International Conference on Cyber Security and Cloud Computing
   (CSCloud)}, 2016, pp. 198--203.
 
 \bibitem{7281777}
 D.~Hallmans, K.~Sandström, T.~Nolte, and S.~Larsson, ``Challenges and
   opportunities when introducing cloud computing into embedded systems,'' in
-  \emph{2015 IEEE 13th International Conference on Industrial Informatics
+  \emph{Proc. 2015 IEEE 13th International Conference on Industrial Informatics
   (INDIN)}, 2015, pp. 454--459.
 
 \bibitem{7946662}
 M.~Jassas, J.~Mathew, A.~Azim, and Q.~H. Mahmoud, ``A framework for extending
-  resources of embedded systems using the cloud,'' in \emph{2017 IEEE 30th
-  Canadian Conference on Electrical and Computer Engineering (CCECE)}, 2017,
-  pp. 1--5.
+  resources of embedded systems using the cloud,'' in \emph{Proc. 2017 IEEE
+  30th Canadian Conference on Electrical and Computer Engineering (CCECE)},
+  2017, pp. 1--5.
 
-\bibitem{cite-key}
-\BIBentryALTinterwordspacing
+\bibitem{mora}
 S.~Kanhere, H.~Mora~Mora, D.~Gil, J.~Colom~L{\'o}pez, and M.~T. Signes~Pont,
   ``Flexible framework for real-time embedded systems based on mobile cloud
   computing paradigm,'' \emph{Mobile Information Systems}, vol. 2015, p.
-  652462, 2015. [Online]. Available: \url{https://doi.org/10.1155/2015/652462}
-\BIBentrySTDinterwordspacing
+  652462, 2015.
 
 \bibitem{8825621}
 N.~Nikolov and O.~Nakov, ``Creating architecture and software of embedded
   systems with constrained resources and their communication to the iot
-  cloud,'' in \emph{2019 X National Conference with International Participation
-  (ELECTRONICA)}, 2019, pp. 1--4.
+  cloud,'' in \emph{Proc. 2019 X National Conference with International
+  Participation (ELECTRONICA)}, 2019, pp. 1--4.
 
-\bibitem{10.1145/375977.375978}
-\BIBentryALTinterwordspacing
-P.~R. Panda, F.~Catthoor, N.~D. Dutt, K.~Danckaert, E.~Brockmeyer, C.~Kulkarni,
-  A.~Vandercappelle, and P.~G. Kjeldsberg, ``Data and memory optimization
-  techniques for embedded systems,'' \emph{ACM Trans. Des. Autom. Electron.
-  Syst.}, vol.~6, no.~2, p. 149–206, apr 2001. [Online]. Available:
-  \url{https://doi.org/10.1145/375977.375978}
-\BIBentrySTDinterwordspacing
-
-\bibitem{10.1145/370155.370333}
-\BIBentryALTinterwordspacing
+\bibitem{qqqq}
 M.~Pedram, ``Power optimization and management in embedded systems,'' in
   \emph{Proceedings of the 2001 Asia and South Pacific Design Automation
   Conference}, ser. ASP-DAC '01.\hskip 1em plus 0.5em minus 0.4em\relax New
   York, NY, USA: Association for Computing Machinery, 2001, p. 239–244.
-  [Online]. Available: \url{https://doi.org/10.1145/370155.370333}
-\BIBentrySTDinterwordspacing
 
 \bibitem{7969658}
 A.~Pötsch, A.~Berger, and A.~Springer, ``Efficient analysis of power
-  consumption behaviour of embedded wireless iot systems,'' in \emph{2017 IEEE
-  International Instrumentation and Measurement Technology Conference (I2MTC)},
-  2017, pp. 1--6.
+  consumption behaviour of embedded wireless {IoT} systems,'' in \emph{Proc.
+  2017 IEEE International Instrumentation and Measurement Technology Conference
+  (I2MTC)}, 2017, pp. 1--6.
 
-\bibitem{10.1145/2465351.2465353}
-\BIBentryALTinterwordspacing
+\bibitem{abcd}
 Z.~Qian, Y.~He, C.~Su, Z.~Wu, H.~Zhu, T.~Zhang, L.~Zhou, Y.~Yu, and Z.~Zhang,
   ``Timestream: Reliable stream computation in the cloud,'' in
   \emph{Proceedings of the 8th ACM European Conference on Computer Systems},
   ser. EuroSys '13.\hskip 1em plus 0.5em minus 0.4em\relax New York, NY, USA:
-  Association for Computing Machinery, 2013, p. 1–14. [Online]. Available:
-  \url{https://doi.org/10.1145/2465351.2465353}
-\BIBentrySTDinterwordspacing
+  Association for Computing Machinery, 2013, p. 1–14.
 
 \bibitem{7750968}
 F.~Samie, L.~Bauer, and J.~Henkel, ``Iot technologies for embedded computing: A
-  survey,'' in \emph{2016 International Conference on Hardware/Software
+  survey,'' in \emph{Proc. 2016 International Conference on Hardware/Software
   Codesign and System Synthesis (CODES+ISSS)}, 2016, pp. 1--10.
 
 \bibitem{1544328}
 E.~Sha, ``Parallel embedded systems: optimizations and challenges,'' in
-  \emph{Conference, Emerging Information Technology 2005.}, 2005, pp. 4 pp.--.
+  \emph{Proc. Conference, Emerging Information Technology 2005.}, 2005, pp. 4
+  pp.--.
 
 \end{thebibliography}
